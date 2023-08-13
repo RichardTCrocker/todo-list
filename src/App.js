@@ -1,23 +1,33 @@
-import logo from './logo.svg';
 import './App.css';
+import React, {useState} from 'react';
+import DisplayForm from './components/DisplayForm';
+import ToDoForm from './components/ToDoForm';
 
 function App() {
+    const [nextToDo, setNext] = useState([])
+    const addToList = (task) =>{
+      setNext([...nextToDo, task])
+    }
+    const deleteTask = (delIdx) =>{
+      const removeTask = nextToDo.filter((oneTask, Idx)=> Idx !== delIdx)
+      setNext(removeTask)
+    }
+    const completeTask = (completeIdx, isChecked)=>{
+      const newTask = nextToDo.map((oneTask, Idx)=>{
+        if (completeIdx === Idx){
+          return {...oneTask, complete:isChecked};
+        }
+        else{
+          return oneTask;
+        }
+      })
+      setNext(newTask)
+    }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <ToDoForm newToDo={addToList}/>
+      <DisplayForm nextToDo={nextToDo} deleteTask={deleteTask} completeTask={completeTask}/>
     </div>
   );
 }
